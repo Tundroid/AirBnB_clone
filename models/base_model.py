@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""BaseModel module"""
 
 import uuid
 from datetime import datetime
@@ -6,6 +7,7 @@ import models
 
 
 class BaseModel:
+    """BaseModel class implementation"""
     id = str(uuid.uuid4())
     created_at = updated_at = datetime.now()
 
