@@ -5,13 +5,13 @@ import unittest
 from models.review import Review
 
 class TestReview(unittest.TestCase):
-    """Review class implementation"""
+    """Unit tests for the Review class"""
 
-    def __init__(self, place_id="", user_id="", text=""):
-        super().__init__()
-        self.place_id = place_id
-        self.user_id = user_id
-        self.text = text
+    def test_review_attributes(self):
+        review = Review(place_id="", user_id="", text="")
+        self.assertEqual(review.place_id, "")
+        self.assertEqual(review.user_id, "")
+        self.assertEqual(review.text, "")
 
 if __name__ == '__main__':
     unittest.main()
