@@ -8,6 +8,7 @@ import models
 
 class BaseModel:
     """BaseModel class implementation"""
+
     id = str(uuid.uuid4())
     created_at = updated_at = datetime.now()
 
@@ -22,8 +23,7 @@ class BaseModel:
             self.updated_at = datetime.fromisoformat(kwargs["updated_at"])
 
     def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__,
-                                     self.id, self.__dict__)
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         models.storage.save()

@@ -22,8 +22,7 @@ class FileStorage():
         return self.__objects
 
     def new(self, obj):
-        key = "{}.{}".format(obj.__class__.__name__, obj.id)
-        self.__objects[key] = obj
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
         with open(self.__file_path, mode="w", encoding="utf-8") as file:

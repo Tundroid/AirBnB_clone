@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""Console Module"""
+
 import cmd
 from models.base_model import BaseModel
 from models.user import User
@@ -14,9 +16,11 @@ import json
 
 
 class HBNBCommand(cmd.Cmd):
+    """HBNBCommand class implementation inheriting from cmd.Cmd"""
+
     prompt = '(hbnb) '
 
-    def safety_check(self, arg=None):
+    def class_check(self, arg=None):
         if arg:
             try:
                 tokens = self.parseline(arg)
@@ -29,14 +33,14 @@ class HBNBCommand(cmd.Cmd):
         return False
 
     def do_create(self, arg):
-        if self.safety_check(arg):
+        if self.class_check(arg):
             new_obj = eval(arg)()
             storage.new(new_obj)
-            storage.save()
+            new_obj.save()
             print(new_obj.id)
 
     def do_show(self, arg):
-        if self.safety_check(arg):
+        if self.class_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
                 print("** instance id missing **")
@@ -48,7 +52,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_destroy(self, arg):
-        if self.safety_check(arg):
+        if self.class_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
                 print("** instance id missing **")
@@ -61,7 +65,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         if arg:
-            if not self.safety_check(arg):
+            if not self.class_check(arg):
                 return
         obj_list = []
         for obj in storage.all().values():
@@ -74,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, arg):
         if arg:
-            if not self.safety_check(arg):
+            if not self.class_check(arg):
                 return
         count = 0
         for obj in storage.all().values():
@@ -86,7 +90,7 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def do_update(self, arg):
-        if self.safety_check(arg):
+        if self.class_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
                 print("** instance id missing **")
@@ -102,15 +106,14 @@ class HBNBCommand(cmd.Cmd):
                         print("** value missing **")
                 else:
                     print("** attribute name missing **")
-
             except KeyError:
                 print("** no instance found **")
 
     def default(self, line):
         """Handle unrecognized commands."""
 
-        pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
         pattern_generic = re.compile(r'^.*\..*\(\)$')
+        pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
         pattern_with_attr = re.compile(r'^.*\..*\(".*",\s+".*",\s+.*\)$')
         pattern_with_dict = re.compile(r'^.*\..*\(".*",\s+\{.*\}\)$')
 
@@ -118,15 +121,6 @@ class HBNBCommand(cmd.Cmd):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
             self.onecmd(f"{command} {model}")
-        elif pattern_with_attr.match(line):
-            command = line.split(".")[1].split("(")[0]
-            model = line.split(".")[0]
-            pattern = re.compile(r'\(.*\)')
-            args = pattern.search(line).group(0).strip("()").split(",")
-            id = args[0].strip('"')
-            attr = args[1]
-            val = args[2]
-            self.onecmd(f"{command} {model} {id} {attr} {val}")
         elif pattern_with_dict.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
@@ -141,6 +135,15 @@ class HBNBCommand(cmd.Cmd):
                 attr = key
                 val = dict.get(key)
                 self.onecmd(f"{command} {model} {id} {attr} {val}")
+        elif pattern_with_attr.match(line):
+            command = line.split(".")[1].split("(")[0]
+            model = line.split(".")[0]
+            pattern = re.compile(r'\(.*\)')
+            args = pattern.search(line).group(0).strip("()").split(",")
+            id = args[0].strip('"')
+            attr = args[1]
+            val = args[2]
+            self.onecmd(f"{command} {model} {id} {attr} {val}")
         elif pattern_with_id.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
@@ -149,62 +152,6 @@ class HBNBCommand(cmd.Cmd):
             self.onecmd(f"{command} {model} {id}")
         else:
             print(f"Command not recognized: {line}")
-
-    def get_obj_list(self, obj_class):
-        obj_list = []
-        for obj in storage.all().values():
-            if type(obj) is obj_class:
-                obj_list.append(str(obj))
-        return obj_list
-
-    def get_obj_count(self, obj_class):
-        count = 0
-        for obj in storage.all().values():
-            if type(obj) is obj_class:
-                count += 1
-        return count
-
-    def do_BaseModel_all(self, arg):
-        print(self.get_obj_list(BaseModel))
-
-    def do_User_all(self, arg):
-        print(self.get_obj_list(User))
-
-    def do_State_all(self, arg):
-        print(self.get_obj_list(State))
-
-    def do_City_all(self, arg):
-        print(self.get_obj_list(City))
-
-    def do_Place_all(self, arg):
-        print(self.get_obj_list(Place))
-
-    def do_Amenity_all(self, arg):
-        print(self.get_obj_list(Amenity))
-
-    def do_Review_all(self, arg):
-        print(self.get_obj_list(Review))
-
-    def do_BaseModel_count(self, arg):
-        print(self.get_obj_count(BaseModel))
-
-    def do_User_count(self, arg):
-        print(self.get_obj_count(User))
-
-    def do_State_count(self, arg):
-        print(self.get_obj_count(State))
-
-    def do_City_count(self, arg):
-        print(self.get_obj_count(City))
-
-    def do_Place_count(self, arg):
-        print(self.get_obj_count(Place))
-
-    def do_Amenity_count(self, arg):
-        print(self.get_obj_count(Amenity))
-
-    def do_Review_count(self, arg):
-        print(self.get_obj_count(Review))
 
     def do_EOF(self, arg):
         exit()
