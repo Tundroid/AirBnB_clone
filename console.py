@@ -85,6 +85,7 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def do_update(self, arg):
+        print(f"cmd: {arg}")
         if self.safety_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
@@ -110,11 +111,22 @@ class HBNBCommand(cmd.Cmd):
 
         pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
         pattern_generic = re.compile(r'^.*\..*\(\)$')
+        pattern_with_attr = re.compile(r'^.*\..*\(".*",\s+".*",\s+.*\)$')
 
         if pattern_generic.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
             self.onecmd(f"{command} {model}")
+        elif pattern_with_attr.match(line):
+            command = line.split(".")[1].split("(")[0]
+            model = line.split(".")[0]
+            pattern = re.compile(r'\(.*\)')
+            args = pattern.search(line).group(0).strip("()").split(",")
+            id = args[0].strip('"')
+            attr = args[1]
+            val = args[2]
+            print(f"{command} {model} {id} {attr} {val}")
+            self.onecmd(f"{command} {model} {id} {attr} {val}")
         elif pattern_with_id.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
