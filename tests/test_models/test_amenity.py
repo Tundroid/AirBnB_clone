@@ -12,3 +12,8 @@ class TestAmenity(unittest.TestCase):
         amenity = Amenity()
         self.assertEqual(amenity.name, "")
 
+    def test_setting_name(self):
+        """Test setting the name attribute"""
+        amenity = Amenity()
+        amenity.name = ""
+        self.assertEqual(amenity.name, "")
