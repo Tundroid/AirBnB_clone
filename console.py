@@ -103,6 +103,20 @@ class HBNBCommand(cmd.Cmd):
             self.do_Amenity_all(line[len("Amenity.all()"):].strip())
         elif line.startswith("Review.all()"):
             self.do_Review_all(line[len("Review.all()"):].strip())
+        elif line.startswith("BaseModel.count()"):
+            self.do_BaseModel_count(line[len("BaseModel.count()"):].strip())
+        elif line.startswith("User.count()"):
+            self.do_User_count(line[len("User.count()"):].strip())
+        elif line.startswith("State.count()"):
+            self.do_State_count(line[len("State.count()"):].strip())
+        elif line.startswith("City.count()"):
+            self.do_City_count(line[len("City.count()"):].strip())
+        elif line.startswith("Place.count()"):
+            self.do_Place_count(line[len("Place.count()"):].strip())
+        elif line.startswith("Amenity.count()"):
+            self.do_Amenity_count(line[len("Amenity.count()"):].strip())
+        elif line.startswith("Review.count()"):
+            self.do_Review_count(line[len("Review.count()"):].strip())
         else:
             print(f"Command not recognized: {line}")
 
@@ -112,6 +126,13 @@ class HBNBCommand(cmd.Cmd):
             if type(obj) is obj_class:
                 obj_list.append(str(obj))
         return obj_list
+
+    def get_obj_count(self, obj_class):
+        count = 0
+        for obj in storage.all().values():
+            if type(obj) is obj_class:
+                count += 1
+        return count
 
     def do_BaseModel_all(self, arg):
         print(self.get_obj_list(BaseModel))
@@ -133,6 +154,27 @@ class HBNBCommand(cmd.Cmd):
 
     def do_Review_all(self, arg):
         print(self.get_obj_list(Review))
+
+    def do_BaseModel_count(self, arg):
+        print(self.get_obj_count(BaseModel))
+
+    def do_User_count(self, arg):
+        print(self.get_obj_count(User))
+
+    def do_State_count(self, arg):
+        print(self.get_obj_count(State))
+
+    def do_City_count(self, arg):
+        print(self.get_obj_count(City))
+
+    def do_Place_count(self, arg):
+        print(self.get_obj_count(Place))
+
+    def do_Amenity_count(self, arg):
+        print(self.get_obj_count(Amenity))
+
+    def do_Review_count(self, arg):
+        print(self.get_obj_count(Review))
 
     def do_EOF(self, arg):
         exit()
