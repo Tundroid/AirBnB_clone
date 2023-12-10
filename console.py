@@ -35,7 +35,6 @@ class HBNBCommand(cmd.Cmd):
             print(new_obj.id)
 
     def do_show(self, arg):
-        print(f"arg: {arg}")
         if self.safety_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
@@ -109,15 +108,15 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """Handle unrecognized commands."""
 
-        pattern_show = re.compile(r'^.*\.show\(".*"\)$')
+        pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
         pattern_generic = re.compile(r'^.*\..*\(\)$')
 
         if pattern_generic.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
             self.onecmd(f"{command} {model}")
-        elif pattern_show.match(line):
-            command = "show"
+        elif pattern_with_id.match(line):
+            command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
             pattern = re.compile(r'".*"')
             id = pattern.search(line).group(0).strip('"')
