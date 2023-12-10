@@ -12,3 +12,6 @@ class Review(BaseModel):
         self.place_id = place_id
         self.user_id = user_id
         self.text = text
+
+if __name__ == '__main__':
+    unittest.main()
