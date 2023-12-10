@@ -10,6 +10,7 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 import re
+import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -111,6 +112,7 @@ class HBNBCommand(cmd.Cmd):
         pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
         pattern_generic = re.compile(r'^.*\..*\(\)$')
         pattern_with_attr = re.compile(r'^.*\..*\(".*",\s+".*",\s+.*\)$')
+        pattern_with_dict = re.compile(r'^.*\..*\(".*",\s+\{.*\}\)$')
 
         if pattern_generic.match(line):
             command = line.split(".")[1].split("(")[0]
@@ -125,6 +127,20 @@ class HBNBCommand(cmd.Cmd):
             attr = args[1]
             val = args[2]
             self.onecmd(f"{command} {model} {id} {attr} {val}")
+        elif pattern_with_dict.match(line):
+            command = line.split(".")[1].split("(")[0]
+            model = line.split(".")[0]
+            pattern = re.compile(r'\(.*\)')
+            args = pattern.search(line).group(0).strip("()").split(",")
+            id = args[0].strip('"')
+            start = len(command) + len(model) + len(id) + 5
+            dict = line[start:-1].replace("'", '"')
+            print(dict)
+            dict = json.loads(dict)
+            for key in dict.keys():
+                attr = key
+                val = dict.get(key)
+                self.onecmd(f"{command} {model} {id} {attr} {val}")
         elif pattern_with_id.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
