@@ -1,7 +1,13 @@
+#!/usr/bin/python3
+"""Contains tests for city,py"""
+
 import unittest
+froom models.base_model import BaseModel
 from models.city import City
 
+
 class TestCity(unittest.TestCase):
+"""Class for tests on City class"""
 
     def setUp(self):
         self.city = City()
