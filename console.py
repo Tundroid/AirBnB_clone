@@ -89,20 +89,50 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, line):
         """Handle unrecognized commands."""
-        if line.startswith("User.all()"):
+        if line.startswith("BaseModel.all()"):
+            self.do_BaseModel_all(line[len("BaseModel.all()"):].strip())
+        elif line.startswith("User.all()"):
             self.do_User_all(line[len("User.all()"):].strip())
+        elif line.startswith("State.all()"):
+            self.do_State_all(line[len("State.all()"):].strip())
+        elif line.startswith("City.all()"):
+            self.do_City_all(line[len("City.all()"):].strip())
+        elif line.startswith("Place.all()"):
+            self.do_Place_all(line[len("Place.all()"):].strip())
+        elif line.startswith("Amenity.all()"):
+            self.do_Amenity_all(line[len("Amenity.all()"):].strip())
+        elif line.startswith("Review.all()"):
+            self.do_Review_all(line[len("Review.all()"):].strip())
         else:
             print(f"Command not recognized: {line}")
 
-    def do_User_all(self, arg):
-        if arg:
-            if not self.safety_check(arg):
-                return
+    def get_obj_list(self, obj_class):
         obj_list = []
         for obj in storage.all().values():
-            if isinstance(obj, User):
+            if type(obj) is obj_class:
                 obj_list.append(str(obj))
-        print(obj_list)
+        return obj_list
+
+    def do_BaseModel_all(self, arg):
+        print(self.get_obj_list(BaseModel))
+
+    def do_User_all(self, arg):
+        print(self.get_obj_list(User))
+
+    def do_State_all(self, arg):
+        print(self.get_obj_list(State))
+
+    def do_City_all(self, arg):
+        print(self.get_obj_list(City))
+
+    def do_Place_all(self, arg):
+        print(self.get_obj_list(Place))
+
+    def do_Amenity_all(self, arg):
+        print(self.get_obj_list(Amenity))
+
+    def do_Review_all(self, arg):
+        print(self.get_obj_list(Review))
 
     def do_EOF(self, arg):
         exit()
