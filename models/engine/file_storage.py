@@ -12,6 +12,7 @@ from models.review import Review
 
 
 class FileStorage():
+    """FileStorage Class Implementation"""
 
     def __init__(self):
         self.__file_path = "file.json"
