@@ -85,7 +85,6 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def do_update(self, arg):
-        print(f"cmd: {arg}")
         if self.safety_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
@@ -125,7 +124,6 @@ class HBNBCommand(cmd.Cmd):
             id = args[0].strip('"')
             attr = args[1]
             val = args[2]
-            print(f"{command} {model} {id} {attr} {val}")
             self.onecmd(f"{command} {model} {id} {attr} {val}")
         elif pattern_with_id.match(line):
             command = line.split(".")[1].split("(")[0]
