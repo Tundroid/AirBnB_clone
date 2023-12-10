@@ -9,6 +9,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+import re
 
 
 class HBNBCommand(cmd.Cmd):
@@ -34,6 +35,7 @@ class HBNBCommand(cmd.Cmd):
             print(new_obj.id)
 
     def do_show(self, arg):
+        print(f"arg: {arg}")
         if self.safety_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
@@ -88,6 +90,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def default(self, line):
+        pattern = re.compile(r'^.*\.show\(".*"\)$')
         """Handle unrecognized commands."""
         if line.startswith("BaseModel.all()"):
             self.do_BaseModel_all(line[len("BaseModel.all()"):].strip())
@@ -116,7 +119,13 @@ class HBNBCommand(cmd.Cmd):
         elif line.startswith("Amenity.count()"):
             self.do_Amenity_count(line[len("Amenity.count()"):].strip())
         elif line.startswith("Review.count()"):
-            self.do_Review_count(line[len("Review.count()"):].strip())
+            self.do_Review
+        elif pattern.match(line):
+            command = "show"
+            model = line.split(".")[0]
+            pattern = re.compile(r'".*"')
+            id = pattern.search(line).group(0).strip('"')
+            self.onecmd(f"{command} {model} {id}")
         else:
             print(f"Command not recognized: {line}")
 
