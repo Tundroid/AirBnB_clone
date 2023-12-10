@@ -2,9 +2,9 @@
 """Contains tests for review.py"""
 
 import unittest
-from models.base_model import BaseModel
+from models.review import Review
 
-class Review(BaseModel):
+class TestReview(unittest.TestCase):
     """Review class implementation"""
 
     def __init__(self, place_id="", user_id="", text=""):
