@@ -87,6 +87,23 @@ class HBNBCommand(cmd.Cmd):
             except KeyError:
                 print("** no instance found **")
 
+    def default(self, line):
+        """Handle unrecognized commands."""
+        if line.startswith("User.all()"):
+            self.do_User_all(line[len("User.all()"):].strip())
+        else:
+            print(f"Command not recognized: {line}")
+
+    def do_User_all(self, arg):
+        if arg:
+            if not self.safety_check(arg):
+                return
+        obj_list = []
+        for obj in storage.all().values():
+            if isinstance(obj, User):
+                obj_list.append(str(obj))
+        print(obj_list)
+
     def do_EOF(self, arg):
         exit()
 
