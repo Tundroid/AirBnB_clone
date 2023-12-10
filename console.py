@@ -65,8 +65,25 @@ class HBNBCommand(cmd.Cmd):
                 return
         obj_list = []
         for obj in storage.all().values():
-            obj_list.append(str(obj))
+            if arg:
+                if type(obj) is eval(arg):
+                    obj_list.append(str(obj))
+            else:
+                obj_list.append(str(obj))
         print(obj_list)
+
+    def do_count(self, arg):
+        if arg:
+            if not self.safety_check(arg):
+                return
+        count = 0
+        for obj in storage.all().values():
+            if arg:
+                if type(obj) is eval(arg):
+                    count += 1
+            else:
+                count += 1
+        print(count)
 
     def do_update(self, arg):
         if self.safety_check(arg):
@@ -90,37 +107,16 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def default(self, line):
-        pattern = re.compile(r'^.*\.show\(".*"\)$')
         """Handle unrecognized commands."""
-        if line.startswith("BaseModel.all()"):
-            self.do_BaseModel_all(line[len("BaseModel.all()"):].strip())
-        elif line.startswith("User.all()"):
-            self.do_User_all(line[len("User.all()"):].strip())
-        elif line.startswith("State.all()"):
-            self.do_State_all(line[len("State.all()"):].strip())
-        elif line.startswith("City.all()"):
-            self.do_City_all(line[len("City.all()"):].strip())
-        elif line.startswith("Place.all()"):
-            self.do_Place_all(line[len("Place.all()"):].strip())
-        elif line.startswith("Amenity.all()"):
-            self.do_Amenity_all(line[len("Amenity.all()"):].strip())
-        elif line.startswith("Review.all()"):
-            self.do_Review_all(line[len("Review.all()"):].strip())
-        elif line.startswith("BaseModel.count()"):
-            self.do_BaseModel_count(line[len("BaseModel.count()"):].strip())
-        elif line.startswith("User.count()"):
-            self.do_User_count(line[len("User.count()"):].strip())
-        elif line.startswith("State.count()"):
-            self.do_State_count(line[len("State.count()"):].strip())
-        elif line.startswith("City.count()"):
-            self.do_City_count(line[len("City.count()"):].strip())
-        elif line.startswith("Place.count()"):
-            self.do_Place_count(line[len("Place.count()"):].strip())
-        elif line.startswith("Amenity.count()"):
-            self.do_Amenity_count(line[len("Amenity.count()"):].strip())
-        elif line.startswith("Review.count()"):
-            self.do_Review
-        elif pattern.match(line):
+
+        pattern_show = re.compile(r'^.*\.show\(".*"\)$')
+        pattern_generic = re.compile(r'^.*\..*\(\)$')
+
+        if pattern_generic.match(line):
+            command = line.split(".")[1].split("(")[0]
+            model = line.split(".")[0]
+            self.onecmd(f"{command} {model}")
+        elif pattern_show.match(line):
             command = "show"
             model = line.split(".")[0]
             pattern = re.compile(r'".*"')
