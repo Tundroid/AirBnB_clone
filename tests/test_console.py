@@ -19,9 +19,11 @@ class TestHBNBCommand(unittest.TestCase):
     def test_help_show(self):
         with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
             HBNBCommand().onecmd("help show")
-            self.assertEqual(mock_stdout.getvalue().strip(), "Shows the string representation of an instance")
+            self.assertEqual(mock_stdout.getvalue().strip(),
+                             "Shows the string representation of an instance")
 
     # Add more test cases as needed
+
 
 if __name__ == '__main__':
     unittest.main()
