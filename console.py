@@ -162,12 +162,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """Exit the console on EOF.\n"""
-        print()
-        return True
+        exit()
 
     def do_quit(self, arg):
         """Exit the console."""
-        return True
+        exit()
 
 
 if __name__ == '__main__':
