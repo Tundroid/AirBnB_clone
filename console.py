@@ -21,6 +21,7 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
 
     def class_check(self, arg=None):
+        """Check if a given class exists."""
         if arg:
             try:
                 tokens = self.parseline(arg)
@@ -33,6 +34,7 @@ class HBNBCommand(cmd.Cmd):
         return False
 
     def do_create(self, arg):
+        """Create a new instance of a class."""
         if self.class_check(arg):
             new_obj = eval(arg)()
             storage.new(new_obj)
@@ -40,6 +42,7 @@ class HBNBCommand(cmd.Cmd):
             print(new_obj.id)
 
     def do_show(self, arg):
+        """Display the string representation of an instance."""
         if self.class_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
@@ -52,6 +55,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_destroy(self, arg):
+        """Delete an instance based on the class name and id."""
         if self.class_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
@@ -64,6 +68,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
 
     def do_all(self, arg):
+        """Display all instances or all instances of a specific class."""
         if arg:
             if not self.class_check(arg):
                 return
@@ -77,6 +82,7 @@ class HBNBCommand(cmd.Cmd):
         print(obj_list)
 
     def do_count(self, arg):
+        """Count the instances of a class."""
         if arg:
             if not self.class_check(arg):
                 return
@@ -90,6 +96,7 @@ class HBNBCommand(cmd.Cmd):
         print(count)
 
     def do_update(self, arg):
+        """Update an instance attribute or create a new instance."""
         if self.class_check(arg):
             tokens = self.parseline(arg)
             if len(tokens[1]) == 0:
@@ -154,9 +161,11 @@ class HBNBCommand(cmd.Cmd):
             print(f"Command not recognized: {line}")
 
     def do_EOF(self, arg):
+        """Exit the console on EOF."""
         exit()
 
     def do_quit(self, arg):
+        """Exit the console."""
         exit()
 
 
