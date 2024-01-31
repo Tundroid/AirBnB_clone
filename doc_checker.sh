@@ -2,8 +2,18 @@
 #list contents of a directory ignoring characters
 #before and including the first hyphen
 
-list="console models.base_model"
+list="$(ls *.py | cut -d '.' -f1 | tr '\n' ' ')"
+echo $list
 for file in $list;
 do
+	echo $file
+	python3 -c "print(__import__('$file').__doc__)"
+done
+cd models
+list="$(ls *.py | cut -d '.' -f1 | tr '\n' ' ')"
+echo $list
+for file in $list;
+do
+	echo $file
 	python3 -c "print(__import__('$file').__doc__)"
 done
