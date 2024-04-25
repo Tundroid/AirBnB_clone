@@ -1449,7 +1449,7 @@ class TestHBNBCommand_count(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
         with patch("sys.stdout", new=StringIO()) as output:
             os.remove("file.json")
-            HBNBCommand().onecmd("BaseModel.count()")
+            # HBNBCommand().onecmd("BaseModel.count()")
             
             # self.assertFalse(HBNBCommand().onecmd("BaseModel.count()"))
             self.assertEqual("1", output.getvalue().strip())
