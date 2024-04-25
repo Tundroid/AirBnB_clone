@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""__init__ magic method for models directory"""
+"""Initialization of AirBnB console"""
+
 from models.engine.file_storage import FileStorage
 
 
