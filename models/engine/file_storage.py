@@ -19,16 +19,16 @@ class FileStorage():
     __objects = {}
 
     def all(self):
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
-        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
+        FileStorage.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
         with open(self.__file_path, mode="w", encoding="utf-8") as file:
             objs_to_write = {}
-            for obj_key in self.__objects.keys():
-                objs_to_write[obj_key] = self.__objects[obj_key].to_dict()
+            for obj_key in FileStorage.__objects.keys():
+                objs_to_write[obj_key] = FileStorage.__objects[obj_key].to_dict()
             file.write(json.dumps(objs_to_write))
 
     def reload(self):
