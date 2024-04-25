@@ -21,6 +21,8 @@ class BaseModel:
             for key, value in kwargs.items():
                 if key in ("created_at", "updated_at"):
                     setattr(self, key, datetime.fromisoformat(value))
+                elif key == "__class__":
+                    pass
                 else:
                     setattr(self, key, value)
 
@@ -29,7 +31,6 @@ class BaseModel:
 
     def save(self):
         models.storage.save()
-        # self.updated_at = datetime.now()
 
     def to_dict(self):
         my_dict = self.__dict__.copy()

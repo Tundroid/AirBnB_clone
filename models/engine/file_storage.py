@@ -37,9 +37,7 @@ class FileStorage():
                 objects = json.loads(file.read())
                 if not len(objects):
                     return
-                for key in objects.keys():
-                    attribs = objects[key].copy()
-                    cls = attribs.pop("__class__", None)
-                    self.new(eval(cls)(**attribs))
+                for value in objects.values():
+                    self.new(eval(value["__class__"])(**value))
         except FileNotFoundError:
             return
