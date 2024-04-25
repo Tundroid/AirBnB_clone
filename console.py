@@ -68,7 +68,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """Display all instances or all instances of a specific class."""
-        print("I am here")
         if arg:
             if not self.class_check(arg):
                 return
@@ -119,7 +118,6 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """Handle unrecognized commands."""
 
-        print("here...")
         pattern_generic = re.compile(r'^.*\..*\(.*\)$')
         pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
         pattern_with_attr = re.compile(r'^.*\..*\(".*",\s+".*",\s+.*\)$')
@@ -157,11 +155,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """Exit the console on EOF.\n"""
-        exit()
+        return True
 
     def do_quit(self, arg):
         """Exit the console."""
-        exit()
+        return True
 
     def emptyline(self):
         """Do nothing upon receiving an empty line."""
