@@ -27,7 +27,7 @@ class HBNBCommand(cmd.Cmd):
                 tokens = self.parseline(arg)
                 eval(tokens[0]).__class__
                 return True
-            except NameError:
+            except (NameError, SyntaxError):
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
@@ -68,6 +68,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """Display all instances or all instances of a specific class."""
+        print("I am here")
         if arg:
             if not self.class_check(arg):
                 return
@@ -118,7 +119,8 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """Handle unrecognized commands."""
 
-        pattern_generic = re.compile(r'^.*\..*\(\)$')
+        print("here...")
+        pattern_generic = re.compile(r'^.*\..*\(.*\)$')
         pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
         pattern_with_attr = re.compile(r'^.*\..*\(".*",\s+".*",\s+.*\)$')
         pattern_with_dict = re.compile(r'^.*\..*\(".*",\s+\{.*\}\)$')
@@ -126,36 +128,30 @@ class HBNBCommand(cmd.Cmd):
         if pattern_generic.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
-            self.onecmd(f"{command} {model}")
-        elif pattern_with_dict.match(line):
-            command = line.split(".")[1].split("(")[0]
-            model = line.split(".")[0]
-            pattern = re.compile(r'\(.*\)')
-            args = pattern.search(line).group(0).strip("()").split(",")
-            id = args[0].strip('"')
-            start = len(command) + len(model) + len(id) + 5
-            dict = line[start:-1].replace("'", '"')
-            print(dict)
-            dict = json.loads(dict)
-            for key in dict.keys():
-                attr = key
-                val = dict.get(key)
+            if pattern_with_dict.match(line):
+                pattern = re.compile(r'\(.*\)')
+                args = pattern.search(line).group(0).strip("()").split(",")
+                id = args[0].strip('"')
+                # start = len(command) + len(model) + len(id) + 5
+                start = line.find("{")
+                dict = line[start:-1].replace("'", '"')
+                print(dict)
+                dict = json.loads(dict)
+                for attr, val in dict.items():
+                    self.onecmd(f"{command} {model} {id} {attr} {val}")
+            elif pattern_with_attr.match(line):
+                pattern = re.compile(r'\(.*\)')
+                args = pattern.search(line).group(0).strip("()").split(",")
+                id = args[0].strip('"')
+                attr = args[1]
+                val = args[2]
                 self.onecmd(f"{command} {model} {id} {attr} {val}")
-        elif pattern_with_attr.match(line):
-            command = line.split(".")[1].split("(")[0]
-            model = line.split(".")[0]
-            pattern = re.compile(r'\(.*\)')
-            args = pattern.search(line).group(0).strip("()").split(",")
-            id = args[0].strip('"')
-            attr = args[1]
-            val = args[2]
-            self.onecmd(f"{command} {model} {id} {attr} {val}")
-        elif pattern_with_id.match(line):
-            command = line.split(".")[1].split("(")[0]
-            model = line.split(".")[0]
-            pattern = re.compile(r'".*"')
-            id = pattern.search(line).group(0).strip('"')
-            self.onecmd(f"{command} {model} {id}")
+            elif pattern_with_id.match(line):
+                pattern = re.compile(r'".*"')
+                id = pattern.search(line).group(0).strip('"')
+                self.onecmd(f"{command} {model} {id}")
+            else:
+                self.onecmd(f"{command} {model}")
         else:
             print(f"Command not recognized: {line}")
 

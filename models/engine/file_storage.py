@@ -34,8 +34,8 @@ class FileStorage():
     def reload(self):
         try:
             with open(self.__file_path, mode="r", encoding="utf-8") as file:
-                 # read and remove leading and trailing whitespaces
-                 # this will prevent crashing if file.json exists and is empty
+                # read and remove leading and trailing whitespaces
+                # this will prevent crashing if file.json exists and is empty
                 file_content = file.read().strip()
                 if not len(file_content):
                     return
