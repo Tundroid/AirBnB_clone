@@ -1426,7 +1426,7 @@ class TestHBNBCommand_count(unittest.TestCase):
             os.rename("file.json", "tmp")
         except IOError:
             pass
-        FileStorage._FileStorage__objects = {}
+        storage.__file_path = {}
 
     @classmethod
     def tearDown(self):
