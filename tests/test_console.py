@@ -1445,11 +1445,11 @@ class TestHBNBCommand_count(unittest.TestCase):
             self.assertEqual("** class doesn't exist **", output.getvalue().strip())
 
     def test_count_object(self):
-        with open("file.json", "r", encoding="UTF-8") as f:
-            print(f.read())
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
         with patch("sys.stdout", new=StringIO()) as output:
+            with open("file.json", "r", encoding="UTF-8") as f:
+                print(f.read())
             HBNBCommand().onecmd("BaseModel.count()")
             self.assertFalse(HBNBCommand().onecmd("BaseModel.count()"))
             self.assertEqual("1", output.getvalue().strip())
