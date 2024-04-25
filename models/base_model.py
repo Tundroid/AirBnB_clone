@@ -9,9 +9,6 @@ import models
 class BaseModel:
     """BaseModel class implementation"""
 
-    id = str(uuid.uuid4())
-    created_at = updated_at = datetime.now()
-
     def __init__(self, *args, **kwargs):
         if len(kwargs) == 0:
             self.id = str(uuid.uuid4())
@@ -22,7 +19,7 @@ class BaseModel:
                 if key in ("created_at", "updated_at"):
                     setattr(self, key, datetime.fromisoformat(value))
                 elif key == "__class__":
-                    pass
+                    continue
                 else:
                     setattr(self, key, value)
 

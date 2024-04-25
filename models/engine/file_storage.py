@@ -12,7 +12,7 @@ from models.review import Review
 
 
 class FileStorage():
-    """FileStorage Class Implementation"""
+    """FileStorage class implementation"""
 
     def __init__(self):
         self.__file_path = "file.json"
@@ -29,7 +29,7 @@ class FileStorage():
             objs_to_write = {}
             for obj_key in self.__objects.keys():
                 objs_to_write[obj_key] = self.__objects[obj_key].to_dict()
-            file.write(json.dumps(objs_to_write))
+            json.dump(objs_to_write, file)
 
     def reload(self):
         try:
