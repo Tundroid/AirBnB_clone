@@ -34,9 +34,12 @@ class FileStorage():
     def reload(self):
         try:
             with open(self.__file_path, mode="r", encoding="utf-8") as file:
-                objects = json.loads(file.read())
-                if not len(objects):
+                 # read and remove leading and trailing whitespaces
+                 # this will prevent crashing if file.json exists and is empty
+                file_content = file.read().strip()
+                if not len(file_content):
                     return
+                objects = json.loads(file_content)
                 for value in objects.values():
                     self.new(eval(value["__class__"])(**value))
         except FileNotFoundError:
