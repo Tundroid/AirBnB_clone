@@ -14,9 +14,9 @@ from models.review import Review
 class FileStorage():
     """FileStorage Class Implementation"""
 
-    def __init__(self):
-        self.__file_path = "file.json"
-        self.__objects = {}
+
+    __file_path = "file.json"
+    __objects = {}
 
     def all(self):
         return self.__objects
