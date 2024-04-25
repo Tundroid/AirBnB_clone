@@ -37,7 +37,6 @@ class HBNBCommand(cmd.Cmd):
         """Create a new instance of a class."""
         if self.class_check(arg):
             new_obj = eval(arg)()
-            storage.new(new_obj)
             new_obj.save()
             print(new_obj.id)
 
