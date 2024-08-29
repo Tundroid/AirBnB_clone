@@ -26,9 +26,7 @@ class FileStorage():
 
     def save(self):
         with open(self.__file_path, mode="w", encoding="utf-8") as file:
-            objs_to_write = {}
-            for obj_key in self.__objects.keys():
-                objs_to_write[obj_key] = self.__objects[obj_key].to_dict()
+            objs_to_write = {key: obj.to_dict() for key, obj in self.__objects.items()}
             json.dump(objs_to_write, file)
 
     def reload(self):
