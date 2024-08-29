@@ -35,11 +35,9 @@ class FileStorage():
                 # read and remove leading and trailing whitespaces
                 # this will prevent crashing if file.json exists and is empty
                 file_content = file.read().strip()
-                if not len(file_content):
-                    return
-                objects = json.loads(file_content)
-                # print(self.all()) i think you should remove this
-                for value in objects.values():
-                    self.new(eval(value["__class__"])(**value))
+                if len(file_content):
+                    objects = json.loads(file_content)
+                    for value in objects.values():
+                        self.new(eval(value["__class__"])(**value))
         except FileNotFoundError:
-            return
+            pass
