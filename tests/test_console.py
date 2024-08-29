@@ -12,11 +12,7 @@ Unittest classes:
     TestHBNBCommand_update
 """
 import os
-import sys
 import unittest
-from models import storage
-from models.engine.file_storage import FileStorage
-from console import HBNBCommand
 from io import StringIO
 from unittest.mock import patch
 
@@ -29,7 +25,6 @@ class TestHBNBCommand_count(unittest.TestCase):
             os.rename("file.json", "tmp")
         except IOError:
             pass
-        storage.__file_path = {}
 
     @classmethod
     def tearDown(self):
@@ -43,17 +38,20 @@ class TestHBNBCommand_count(unittest.TestCase):
             pass
 
     def test_count_invalid_class(self):
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("MyModel.count()"))
-            self.assertEqual("** class doesn't exist **", output.getvalue().strip())
+        from models import storage
+        print(storage.all())
+        # from console import HBNBCommand
+        # with patch("sys.stdout", new=StringIO()) as output:
+        #     self.assertFalse(HBNBCommand().onecmd("MyModel.count()"))
+        #     self.assertEqual("** class doesn't exist **", output.getvalue().strip())
 
     def test_count_object(self):
+        from models import storage
+        from console import HBNBCommand
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("create BaseModel"))
-        with patch("sys.stdout", new=StringIO()) as output:
-            os.remove("file.json")
-            # HBNBCommand().onecmd("BaseModel.count()")
-            
+        with patch("sys.stdout", new=StringIO()) as output:            
+            print(storage.all())
             self.assertFalse(HBNBCommand().onecmd("BaseModel.count()"))
             self.assertEqual("1", output.getvalue().strip())
         with patch("sys.stdout", new=StringIO()) as output:

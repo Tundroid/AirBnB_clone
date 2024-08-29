@@ -2,13 +2,13 @@
 """FileStorage Module"""
 
 import json
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.city import City
 from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
 from models.place import Place
 from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class FileStorage():
@@ -26,9 +26,7 @@ class FileStorage():
 
     def save(self):
         with open(self.__file_path, mode="w", encoding="utf-8") as file:
-            objs_to_write = {}
-            for obj_key in self.__objects.keys():
-                objs_to_write[obj_key] = self.__objects[obj_key].to_dict()
+            objs_to_write = {key: obj.to_dict() for key, obj in self.__objects.items()}
             json.dump(objs_to_write, file)
 
     def reload(self):
@@ -40,6 +38,7 @@ class FileStorage():
                 if not len(file_content):
                     return
                 objects = json.loads(file_content)
+                print(self.all())
                 for value in objects.values():
                     self.new(eval(value["__class__"])(**value))
         except FileNotFoundError:
