@@ -40,7 +40,7 @@ class FileStorage():
                 if not len(file_content):
                     return
                 objects = json.loads(file_content)
-                print(self.all())
+                # print(self.all()) i think you should remove this
                 for value in objects.values():
                     self.new(eval(value["__class__"])(**value))
         except FileNotFoundError:
