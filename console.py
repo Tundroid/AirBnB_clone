@@ -2,17 +2,18 @@
 """Console Module"""
 
 import cmd
-from models.base_model import BaseModel
-from models.user import User
-from models import storage
+import json
+import re
 import shlex
-from models.state import State
-from models.city import City
+
+from models import storage
 from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
 from models.place import Place
 from models.review import Review
-import re
-import json
+from models.state import State
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -20,14 +21,16 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
 
-    def class_check(self, arg=None):
+    def syntax_check(self, args=[], id_check=True):
         """Check if a given class exists."""
-        if arg:
+        if args:
             try:
-                tokens = self.parseline(arg)
-                eval(tokens[0]).__class__
+                globals()[args[0]]
+                if id_check and len(args) == 1:
+                    print("** instance id missing **")
+                    return False
                 return True
-            except (NameError, SyntaxError):
+            except KeyError:
                 print("** class doesn't exist **")
         else:
             print("** class name missing **")
@@ -35,33 +38,28 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Create a new instance of a class."""
-        if self.class_check(arg):
-            new_obj = eval(arg)()
+        args = shlex.split(arg)
+        if self.syntax_check(args, False):
+            new_obj = eval(args[0])()
             new_obj.save()
             print(new_obj.id)
 
     def do_show(self, arg):
         """Display the string representation of an instance."""
-        if self.class_check(arg):
-            tokens = self.parseline(arg)
-            if len(tokens[1]) == 0:
-                print("** instance id missing **")
-                return
+        args = shlex.split(arg)
+        if self.syntax_check(args):
             try:
-                obj = storage.all()[f"{tokens[0]}.{tokens[1]}"]
+                obj = storage.all()[f"{args[0]}.{args[1]}"]
                 print(obj)
             except KeyError:
                 print("** no instance found **")
 
     def do_destroy(self, arg):
         """Delete an instance based on the class name and id."""
-        if self.class_check(arg):
-            tokens = self.parseline(arg)
-            if len(tokens[1]) == 0:
-                print("** instance id missing **")
-                return
+        args = shlex.split(arg)
+        if self.syntax_check(args):
             try:
-                del storage.all()[f"{tokens[0]}.{tokens[1]}"]
+                del storage.all()[f"{args[0]}.{args[1]}"]
                 storage.save()
             except KeyError:
                 print("** no instance found **")
@@ -69,12 +67,13 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Display all instances or all instances of a specific class."""
         if arg:
-            if not self.class_check(arg):
+            args = shlex.split(arg)
+            if not self.syntax_check(args, False):
                 return
         obj_list = []
         for obj in storage.all().values():
             if arg:
-                if type(obj) is eval(arg):
+                if type(obj) is eval(args[0]):
                     obj_list.append(str(obj))
             else:
                 obj_list.append(str(obj))
@@ -83,12 +82,13 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, arg):
         """Count the instances of a class."""
         if arg:
-            if not self.class_check(arg):
+            args = shlex.split(arg)
+            if not self.syntax_check(args, False):
                 return
         count = 0
         for obj in storage.all().values():
             if arg:
-                if type(obj) is eval(arg):
+                if type(obj) is eval(args[0]):
                     count += 1
             else:
                 count += 1
@@ -96,14 +96,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """Update an instance attribute or create a new instance."""
-        if self.class_check(arg):
-            tokens = self.parseline(arg)
-            if len(tokens[1]) == 0:
-                print("** instance id missing **")
-                return
+        args = shlex.split(arg)
+        if self.syntax_check(args):
             try:
-                attribs = shlex.split(tokens[1])
-                obj = storage.all()[f"{tokens[0]}.{attribs[0]}"]
+                attribs = args[1:]
+                obj = storage.all()[f"{args[0]}.{attribs[0]}"]
                 if len(attribs) > 1:
                     if len(attribs) > 2:
                         setattr(obj, attribs[1], attribs[2])
@@ -119,9 +116,9 @@ class HBNBCommand(cmd.Cmd):
         """Handle unrecognized commands."""
 
         pattern_generic = re.compile(r'^.*\..*\(.*\)$')
-        pattern_with_id = re.compile(r'^.*\..*\(".*"\)$')
-        pattern_with_attr = re.compile(r'^.*\..*\(".*",\s+".*",\s+.*\)$')
-        pattern_with_dict = re.compile(r'^.*\..*\(".*",\s+\{.*\}\)$')
+        pattern_with_id = re.compile(r'^.*\..*\(\s*".*"\s*\)$')
+        pattern_with_attr = re.compile(r'^.*\..*\(\s*".*"\s*,\s*".*"\s*,?.*?\)$')
+        pattern_with_dict = re.compile(r'^.*\..*\(\s*".*"\s*,\s*\{.*\}\s*\)$')
 
         if pattern_generic.match(line):
             command = line.split(".")[1].split("(")[0]
@@ -129,20 +126,21 @@ class HBNBCommand(cmd.Cmd):
             if pattern_with_dict.match(line):
                 pattern = re.compile(r'\(.*\)')
                 args = pattern.search(line).group(0).strip("()").split(",")
-                id = args[0].strip('"')
-                # start = len(command) + len(model) + len(id) + 5
-                start = line.find("{")
-                dict = line[start:-1].replace("'", '"')
-                print(dict)
-                dict = json.loads(dict)
-                for attr, val in dict.items():
-                    self.onecmd(f"{command} {model} {id} {attr} {val}")
+                id = args[0].strip(' "')
+                pattern = re.compile(r'\{.*\}')
+                try:
+                    dict = json.loads(pattern.search(line).group(0).replace("'", '"'))
+                    for attr, val in dict.items():
+                        val = f"'{val}'" if isinstance(val, str) else val
+                        self.onecmd(f"{command} {model} {id} {attr} {val}")
+                except json.decoder.JSONDecodeError:
+                    print("** invalid dictionary **")
             elif pattern_with_attr.match(line):
                 pattern = re.compile(r'\(.*\)')
                 args = pattern.search(line).group(0).strip("()").split(",")
                 id = args[0].strip('"')
                 attr = args[1]
-                val = args[2]
+                val = "" if len(args) < 3 else args[2]
                 self.onecmd(f"{command} {model} {id} {attr} {val}")
             elif pattern_with_id.match(line):
                 pattern = re.compile(r'".*"')
