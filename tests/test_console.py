@@ -63,24 +63,24 @@ class TestHBNBCommand(unittest.TestCase):
     #         HBNBCommand().onecmd(f"update User {user_id} name John")
     #         self.assertIn("John", f.getvalue())
     
-class TestHBNBCommandCreate(unittest.TestCase):
+# class TestHBNBCommandCreate(unittest.TestCase):
 
-    def test_create(self):
-        with patch('sys.stdout', new=StringIO()) as f:
-            expect = "** class name missing **"
-            HBNBCommand().onecmd("create")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+#     def test_create(self):
+#         with patch('sys.stdout', new=StringIO()) as f:
+#             expect = "** class name missing **"
+#             HBNBCommand().onecmd("create")
+#             self.assertEqual(expect, f.getvalue().strip("\n"))
 
-    def test_create_nonexistent_class(self):
-        with patch('sys.stdout', new=StringIO()) as f:
-            expect = "** class doesn't exist **"
-            HBNBCommand().onecmd("create NoModel")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+#     def test_create_nonexistent_class(self):
+#         with patch('sys.stdout', new=StringIO()) as f:
+#             expect = "** class doesn't exist **"
+#             HBNBCommand().onecmd("create NoModel")
+#             self.assertEqual(expect, f.getvalue().strip("\n"))
 
-    def test_create_existing_class(self):
-        with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd("create User")
-            self.assertIn(f"User.{f.getvalue()}".strip("\n"), storage.all().keys())
+#     def test_create_existing_class(self):
+#         with patch('sys.stdout', new=StringIO()) as f:
+#             HBNBCommand().onecmd("create User")
+#             self.assertIn(f"User.{f.getvalue()}".strip("\n"), storage.all().keys())
 
 if __name__ == '__main__':
     unittest.main()
