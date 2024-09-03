@@ -26,6 +26,5 @@ class TestAmenity(unittest.TestCase):
         model_dict = self.model.to_dict()
         self.assertEqual(model_dict['name'], self.model.name)
 
-
 if __name__ == '__main__':
     unittest.main()
