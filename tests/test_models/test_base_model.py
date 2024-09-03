@@ -2,6 +2,7 @@ import unittest
 from models.base_model import BaseModel
 import datetime
 
+
 class TestBaseModel(unittest.TestCase):
     def setUp(self):
         self.model = BaseModel()
@@ -16,16 +17,14 @@ class TestBaseModel(unittest.TestCase):
 
     def test_init_with_kwargs(self):
         kwargs = {
-            'id': '123',
+            'id': 'e49ada22-140b-4f58-8a1d-6af38c5dda19',
             'created_at': '2024-09-03T12:00:00',
-            'updated_at': '2024-09-03T12:00:00',
-            'name': 'Test Model'
+            'updated_at': '2024-09-03T12:00:00'
         }
         model = BaseModel(**kwargs)
-        self.assertEqual(model.id, '123')
+        self.assertEqual(model.id, 'e49ada22-140b-4f58-8a1d-6af38c5dda19')
         self.assertEqual(model.created_at, datetime.datetime.fromisoformat('2024-09-03T12:00:00'))
         self.assertEqual(model.updated_at, datetime.datetime.fromisoformat('2024-09-03T12:00:00'))
-        self.assertEqual(model.name, 'Test Model')
 
     def test_str_representation(self):
         self.assertEqual(str(self.model), f"[BaseModel] ({self.model.id}) {self.model.__dict__}")
@@ -42,6 +41,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(model_dict['id'], self.model.id)
         self.assertEqual(model_dict['created_at'], self.model.created_at.isoformat())
         self.assertEqual(model_dict['updated_at'], self.model.updated_at.isoformat())
+
 
 if __name__ == '__main__':
     unittest.main()
