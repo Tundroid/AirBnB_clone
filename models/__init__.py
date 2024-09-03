@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Initialization of AirBnB console"""
+"""Initialization of AirBnB"""
 
 from .engine.file_storage import FileStorage
 

@@ -116,33 +116,34 @@ class HBNBCommand(cmd.Cmd):
         """Handle unrecognized commands."""
 
         pattern_generic = re.compile(r'^.*\..*\(.*\)$')
-        pattern_with_id = re.compile(r'^.*\..*\(\s*".*"\s*\)$')
-        pattern_with_attr = re.compile(r'^.*\..*\(\s*".*"\s*,\s*".*"\s*,?.*?\)$')
-        pattern_with_dict = re.compile(r'^.*\..*\(\s*".*"\s*,\s*\{.*\}\s*\)$')
+        pattern_id = re.compile(r'^.*\..*\(\s*".*"\s*\)$')
+        pattern_attr = re.compile(r'^.*\..*\(\s*".*"\s*,\s*".*"\s*,?.*?\)$')
+        pattern_dict = re.compile(r'^.*\..*\(\s*".*"\s*,\s*\{.*\}\s*\)$')
 
         if pattern_generic.match(line):
             command = line.split(".")[1].split("(")[0]
             model = line.split(".")[0]
-            if pattern_with_dict.match(line):
+            if pattern_dict.match(line):
                 pattern = re.compile(r'\(.*\)')
                 args = pattern.search(line).group(0).strip("()").split(",")
                 id = args[0].strip(' "')
                 pattern = re.compile(r'\{.*\}')
                 try:
-                    dict = json.loads(pattern.search(line).group(0).replace("'", '"'))
+                    dict = pattern.search(line).group(0).replace("'", '"')
+                    dict = json.loads(dict)
                     for attr, val in dict.items():
                         val = f"'{val}'" if isinstance(val, str) else val
                         self.onecmd(f"{command} {model} {id} {attr} {val}")
                 except json.decoder.JSONDecodeError:
                     print("** invalid dictionary **")
-            elif pattern_with_attr.match(line):
+            elif pattern_attr.match(line):
                 pattern = re.compile(r'\(.*\)')
                 args = pattern.search(line).group(0).strip("()").split(",")
                 id = args[0].strip('"')
                 attr = args[1]
                 val = "" if len(args) < 3 else args[2]
                 self.onecmd(f"{command} {model} {id} {attr} {val}")
-            elif pattern_with_id.match(line):
+            elif pattern_id.match(line):
                 pattern = re.compile(r'".*"')
                 id = pattern.search(line).group(0).strip('"')
                 self.onecmd(f"{command} {model} {id}")
