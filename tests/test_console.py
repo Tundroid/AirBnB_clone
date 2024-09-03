@@ -20,6 +20,10 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertTrue(HBNBCommand().onecmd("quit"))
 
+    def test_EOF(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertTrue(HBNBCommand().onecmd("EOF"))
+
     def test_emptyline(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("")
