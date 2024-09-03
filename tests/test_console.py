@@ -20,7 +20,7 @@ class TestHBNBCommand(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertTrue(HBNBCommand().onecmd("quit"))
 
-    def test_EOF(self):
+    def test_EOFsdlfjk(self):
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertTrue(HBNBCommand().onecmd("EOF"))
 
@@ -85,6 +85,25 @@ class TestHBNBCommand(unittest.TestCase):
 #         with patch('sys.stdout', new=StringIO()) as f:
 #             HBNBCommand().onecmd("create User")
 #             self.assertIn(f"User.{f.getvalue()}".strip("\n"), storage.all().keys())
+
+class TestHBNBCommandShow(unittest.TestCase):
+
+    def test_show_missing_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** class name missing **"
+            HBNBCommand().onecmd("create")
+            self.assertEqual(expect, f.getvalue().strip("\n"))
+
+    def test_create_nonexistent_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** class doesn't exist **"
+            HBNBCommand().onecmd("create NoModel")
+            self.assertEqual(expect, f.getvalue().strip("\n"))
+
+    def test_create_existing_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd("create User")
+            self.assertIn(f"User.{f.getvalue()}".strip("\n"), storage.all().keys())
 
 if __name__ == '__main__':
     unittest.main()
