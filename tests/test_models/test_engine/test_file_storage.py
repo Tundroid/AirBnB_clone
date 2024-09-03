@@ -46,6 +46,10 @@ class TestFileStorage(unittest.TestCase):
         self.model.reload()
         self.assertEqual(len(self.model.all()), 1)
 
+    def test_reload_with_arg(self):
+        with self.assertRaises(TypeError):
+            self.model.reload(None)
+
     def tearDown(self):
         if os.path.exists("file.json"):
             os.remove("file.json")
