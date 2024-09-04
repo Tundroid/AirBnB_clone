@@ -163,6 +163,12 @@ class TestHBNBCommandAll(unittest.TestCase):
             HBNBCommand().onecmd("all")
             self.assertEqual(expect, f.getvalue().strip())
 
+    def test_missing_class_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "[]"
+            HBNBCommand().onecmd("BaseModel.all()")
+            self.assertEqual(expect, f.getvalue().strip())
+
     # def test_nonexistent_class(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** class doesn't exist **"
