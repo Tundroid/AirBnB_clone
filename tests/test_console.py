@@ -249,5 +249,85 @@ class TestHBNBCommandUpdate(unittest.TestCase):
     #         HBNBCommand().onecmd("show BaseModel no_id12340")
     #         self.assertEqual(expect, f.getvalue().strip())
 
+class TestHBNBCommandCount(unittest.TestCase):
+    
+    def setUp(self):
+        if os.path.exists("file.json"):
+            shutil.move("file.json", "file.json.backup")
+        storage._FileStorage__objects = {}
+    
+    def tearDown(self):
+        if os.path.exists("file.json"):
+            os.remove("file.json")
+        if os.path.exists("file.json.backup"):
+            shutil.move("file.json.backup", "file.json")
+
+    def test_missing_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("count")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_base_model_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("BaseModel.count()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_user_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("User.count()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_state_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("State.count()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_city_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("City.count()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_place_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("Place.count()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_review_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("Review.count()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_amenity_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "0"
+            HBNBCommand().onecmd("Amenity.count()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    # def test_nonexistent_class(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** class doesn't exist **"
+    #         HBNBCommand().onecmd("show NoModel")
+    #         self.assertEqual(expect, f.getvalue().strip())
+
+    # def test_missing_id(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** instance id missing **"
+    #         HBNBCommand().onecmd("show BaseModel")
+    #         self.assertEqual(expect, f.getvalue().strip())
+
+    # def test_nonexistent_id(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** no instance found **"
+    #         HBNBCommand().onecmd("show BaseModel no_id12340")
+    #         self.assertEqual(expect, f.getvalue().strip())
+
+
 if __name__ == '__main__':
     unittest.main()
