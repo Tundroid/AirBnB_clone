@@ -38,7 +38,7 @@ class TestHBNBCommand(unittest.TestCase):
     def test_create(self):
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd("create User")
-            self.assertIn(f"User.{f.getvalue()}".strip("\n"), storage.all().keys())
+            self.assertIn(f"User.{f.getvalue()}".strip(), storage.all().keys())
 
     # def test_show(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
@@ -79,18 +79,18 @@ class TestHBNBCommand(unittest.TestCase):
 #         with patch('sys.stdout', new=StringIO()) as f:
 #             expect = "** class name missing **"
 #             HBNBCommand().onecmd("create")
-#             self.assertEqual(expect, f.getvalue().strip("\n"))
+#             self.assertEqual(expect, f.getvalue().strip())
 
 #     def test_create_nonexistent_class(self):
 #         with patch('sys.stdout', new=StringIO()) as f:
 #             expect = "** class doesn't exist **"
 #             HBNBCommand().onecmd("create NoModel")
-#             self.assertEqual(expect, f.getvalue().strip("\n"))
+#             self.assertEqual(expect, f.getvalue().strip())
 
 #     def test_create_existing_class(self):
 #         with patch('sys.stdout', new=StringIO()) as f:
 #             HBNBCommand().onecmd("create User")
-#             self.assertIn(f"User.{f.getvalue()}".strip("\n"), storage.all().keys())
+#             self.assertIn(f"User.{f.getvalue()}".strip(), storage.all().keys())
 
 class TestHBNBCommandShow(unittest.TestCase):
 
@@ -98,25 +98,25 @@ class TestHBNBCommandShow(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "** class name missing **"
             HBNBCommand().onecmd("show")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+            self.assertEqual(expect, f.getvalue().strip())
 
     def test_nonexistent_class(self):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "** class doesn't exist **"
             HBNBCommand().onecmd("show NoModel")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+            self.assertEqual(expect, f.getvalue().strip())
 
     def test_missing_id(self):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "** instance id missing **"
             HBNBCommand().onecmd("show BaseModel")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+            self.assertEqual(expect, f.getvalue().strip())
 
     def test_nonexistent_id(self):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "** no instance found **"
             HBNBCommand().onecmd("show BaseModel no_id12340")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+            self.assertEqual(expect, f.getvalue().strip())
 
 class TestHBNBCommandDestroy(unittest.TestCase):
 
@@ -124,25 +124,25 @@ class TestHBNBCommandDestroy(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "** class name missing **"
             HBNBCommand().onecmd("destroy")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+            self.assertEqual(expect, f.getvalue().strip())
 
     # def test_nonexistent_class(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** class doesn't exist **"
     #         HBNBCommand().onecmd("show NoModel")
-    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+    #         self.assertEqual(expect, f.getvalue().strip())
 
     # def test_missing_id(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** instance id missing **"
     #         HBNBCommand().onecmd("show BaseModel")
-    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+    #         self.assertEqual(expect, f.getvalue().strip())
 
     # def test_nonexistent_id(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** no instance found **"
     #         HBNBCommand().onecmd("show BaseModel no_id12340")
-    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+    #         self.assertEqual(expect, f.getvalue().strip())
 
 class TestHBNBCommandAll(unittest.TestCase):
     
@@ -161,25 +161,51 @@ class TestHBNBCommandAll(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "[]"
             HBNBCommand().onecmd("all")
-            self.assertEqual(expect, f.getvalue().strip("\n"))
+            self.assertEqual(expect, f.getvalue().strip())
 
     # def test_nonexistent_class(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** class doesn't exist **"
     #         HBNBCommand().onecmd("show NoModel")
-    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+    #         self.assertEqual(expect, f.getvalue().strip())
 
     # def test_missing_id(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** instance id missing **"
     #         HBNBCommand().onecmd("show BaseModel")
-    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+    #         self.assertEqual(expect, f.getvalue().strip())
 
     # def test_nonexistent_id(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** no instance found **"
     #         HBNBCommand().onecmd("show BaseModel no_id12340")
-    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+    #         self.assertEqual(expect, f.getvalue().strip())
+
+class TestHBNBCommandUpdate(unittest.TestCase):
+
+    def test_missing_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** class name missing **"
+            HBNBCommand().onecmd("update")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    # def test_nonexistent_class(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** class doesn't exist **"
+    #         HBNBCommand().onecmd("show NoModel")
+    #         self.assertEqual(expect, f.getvalue().strip())
+
+    # def test_missing_id(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** instance id missing **"
+    #         HBNBCommand().onecmd("show BaseModel")
+    #         self.assertEqual(expect, f.getvalue().strip())
+
+    # def test_nonexistent_id(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** no instance found **"
+    #         HBNBCommand().onecmd("show BaseModel no_id12340")
+    #         self.assertEqual(expect, f.getvalue().strip())
 
 if __name__ == '__main__':
     unittest.main()
