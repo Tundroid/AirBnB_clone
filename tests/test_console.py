@@ -3,6 +3,12 @@ from unittest.mock import patch
 from io import StringIO
 from console import HBNBCommand
 from models import storage
+import models
+from models.engine.file_storage import FileStorage
+import os
+import shutil
+
+
 
 class TestHBNBCommand(unittest.TestCase):
 
@@ -118,6 +124,43 @@ class TestHBNBCommandDestroy(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "** class name missing **"
             HBNBCommand().onecmd("destroy")
+            self.assertEqual(expect, f.getvalue().strip("\n"))
+
+    # def test_nonexistent_class(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** class doesn't exist **"
+    #         HBNBCommand().onecmd("show NoModel")
+    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+
+    # def test_missing_id(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** instance id missing **"
+    #         HBNBCommand().onecmd("show BaseModel")
+    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+
+    # def test_nonexistent_id(self):
+    #     with patch('sys.stdout', new=StringIO()) as f:
+    #         expect = "** no instance found **"
+    #         HBNBCommand().onecmd("show BaseModel no_id12340")
+    #         self.assertEqual(expect, f.getvalue().strip("\n"))
+
+class TestHBNBCommandAll(unittest.TestCase):
+    
+    def setUp(self):
+        if os.path.exists("file.json"):
+            shutil.move("file.json", "file.json.backup")
+        storage._FileStorage__objects = {}
+    
+    def tearDown(self):
+        if os.path.exists("file.json"):
+            os.remove("file.json")
+        if os.path.exists("file.json.backup"):
+            shutil.move("file.json.backup", "file.json")
+
+    def test_missing_class(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "[]"
+            HBNBCommand().onecmd("all")
             self.assertEqual(expect, f.getvalue().strip("\n"))
 
     # def test_nonexistent_class(self):
