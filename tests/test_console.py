@@ -163,16 +163,46 @@ class TestHBNBCommandAll(unittest.TestCase):
             HBNBCommand().onecmd("all")
             self.assertEqual(expect, f.getvalue().strip())
 
-    def test_missing_class_with_method(self):
+    def test_base_model_with_method(self):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "[]"
             HBNBCommand().onecmd("BaseModel.all()")
             self.assertEqual(expect, f.getvalue().strip())
-            
-    def test_missing_class_with_methods(self):
+
+    def test_user_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "[]"
+            HBNBCommand().onecmd("User.all()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_state_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "[]"
+            HBNBCommand().onecmd("State.all()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_city_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "[]"
+            HBNBCommand().onecmd("City.all()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_place_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "[]"
+            HBNBCommand().onecmd("Place.all()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_review_with_method(self):
         with patch('sys.stdout', new=StringIO()) as f:
             expect = "[]"
             HBNBCommand().onecmd("Review.all()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_amenity_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "[]"
+            HBNBCommand().onecmd("Amenity.all()")
             self.assertEqual(expect, f.getvalue().strip())
 
     # def test_nonexistent_class(self):
