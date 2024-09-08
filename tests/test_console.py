@@ -315,6 +315,48 @@ class TestHBNBCommandUpdate(unittest.TestCase):
             HBNBCommand().onecmd("update")
             self.assertEqual(expect, f.getvalue().strip())
 
+    def test_base_model_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("BaseModel.update()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_user_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("User.update()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_state_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("State.update()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_city_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("City.update()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_place_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("Place.update()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_review_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("Review.update()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_amenity_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("Amenity.update()")
+            self.assertEqual(expect, f.getvalue().strip())
+
     # def test_nonexistent_class(self):
     #     with patch('sys.stdout', new=StringIO()) as f:
     #         expect = "** class doesn't exist **"
