@@ -118,6 +118,48 @@ class TestHBNBCommandShow(unittest.TestCase):
             HBNBCommand().onecmd("show BaseModel no_id12340")
             self.assertEqual(expect, f.getvalue().strip())
 
+    def test_base_model_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("BaseModel.show()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_user_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("User.show()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_state_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("State.show()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_city_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("City.show()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_place_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("Place.show()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_review_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("Review.show()")
+            self.assertEqual(expect, f.getvalue().strip())
+
+    def test_amenity_with_method(self):
+        with patch('sys.stdout', new=StringIO()) as f:
+            expect = "** instance id missing **"
+            HBNBCommand().onecmd("Amenity.show()")
+            self.assertEqual(expect, f.getvalue().strip())
+
 class TestHBNBCommandDestroy(unittest.TestCase):
 
     def test_missing_class(self):
